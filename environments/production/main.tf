@@ -19,9 +19,11 @@ provider aws {
 }
 
 module main {
-  source = "../../"
+  source      = "../../"
+  environment = local.environment
 
   providers = {
     aws = aws.ire
   }
+
 }
