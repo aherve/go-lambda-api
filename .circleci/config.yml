@@ -52,6 +52,7 @@ workflows:
       - terraform-linter
       - ping-build
       - terraform-check-deploy:
+          context: aws-deploy
           requires:
             - terraform-linter
             - ping-build
