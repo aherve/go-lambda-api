@@ -2,7 +2,7 @@ variable "environment" {}
 
 # API
 resource aws_api_gateway_rest_api "api" {
-  name       = "go-lambda-api-gateway"
+  name = "go-lambda-api-gateway"
 }
 
 module methods {
