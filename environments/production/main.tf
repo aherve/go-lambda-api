@@ -14,7 +14,7 @@ terraform {
 
 provider aws {
   alias   = "ire"
-  region  = "${local.region}"
+  region  = local.region
   version = "~> 2.30"
 }
 
@@ -22,6 +22,6 @@ module main {
   source = "../../"
 
   providers = {
-    "aws" = "aws.ire"
+    aws = aws.ire
   }
 }

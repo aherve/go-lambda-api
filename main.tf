@@ -1,3 +1,3 @@
 module api {
-  source 
+  source = "./api"
 }
