@@ -41,8 +41,8 @@ resource aws_lambda_permission "api_ping" {
 }
 
 data archive_file "ping" {
-  output_path = "../../components/gateway/ping/main.zip"
-  source_file = "../../components/gateway/ping/main"
+  output_path = "../../methods/ping/main.zip"
+  source_file = "../../methods/ping/main"
   type        = "zip"
 }
 

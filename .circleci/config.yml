@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: compile gateway ping method
+          name: compile ping method
           command: |
             cd methods/ping
             go get -u golang.org/x/lint/golint
