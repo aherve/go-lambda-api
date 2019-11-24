@@ -1,0 +1,57 @@
+version: 2
+
+restore-workspace: &restore-workspace
+  attach_workspace:
+    at: ~/
+
+jobs:
+
+  ping-build:
+    docker:
+      - image: circleci/golang
+    steps:
+      - checkout
+      - run:
+          name: compile gateway ping method
+          command: |
+            cd api/ping
+            go get -u golang.org/x/lint/golint
+            golint -set_exit_status ./...
+            go test ./...
+            GOOS=linux go build -o main
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/api/ping/main
+
+  terraform-linter:
+    docker:
+      - image: hashicorp/terraform:0.11.14
+    steps:
+      - checkout
+      - run: terraform fmt -check
+
+  terraform-check-deploy:
+    docker:
+      - image: hashicorp/terraform:0.12.16
+    steps:
+      - checkout
+      - *restore-workspace
+      - run:
+          name: check deploy
+          command: |
+            cd environments/production
+            terraform init
+            terraform validate
+            terraform plan -lock=false
+
+workflows:
+  version: 2
+  commit-workflow:
+    jobs:
+      - terraform-linter
+      - ping-build
+      - terraform-check-deploy:
+          requires:
+            - terraform-linter
+            - ping-build
