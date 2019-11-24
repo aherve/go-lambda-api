@@ -45,6 +45,20 @@ jobs:
             terraform validate
             terraform plan -lock=false
 
+  production-deploy:
+    docker:
+      - image: hashicorp/terraform:0.12.16
+    steps:
+      - checkout
+      - *restore-workspace
+      - run:
+          name: deploy
+          command: |
+            cd environments/production
+            terraform init
+            terraform apply -auto-approve
+
+
 workflows:
   version: 2
   commit-workflow:
@@ -56,3 +70,13 @@ workflows:
           requires:
             - terraform-linter
             - ping-build
+      - production-deploy:
+          context: aws-deploy
+          requires:
+            - terraform-linter
+            - ping-build
+            - terraform-check-deploy
+          filters:
+            branches:
+              only:
+                - master
